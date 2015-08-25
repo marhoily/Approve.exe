@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ApprovalTools")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("ApprovalTools.Approve")]
+[assembly: AssemblyDescription("Works with Approvals library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ApprovalTools")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyProduct("ApprovalTools.Approve")]
+[assembly: AssemblyCopyright("Copyright © Ilya 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

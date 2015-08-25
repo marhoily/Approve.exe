@@ -1,11 +1,6 @@
-﻿using System.Windows.Controls;
-
-namespace ApprovalTools.Views
+﻿namespace ApprovalTools.Views
 {
-    /// <summary>
-    /// Interaction logic for Shell.xaml
-    /// </summary>
-    public partial class ShellView : UserControl
+    public partial class ShellView 
     {
         public ShellView()
         {
