@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ApprovalTools.Approve.ViewModels
 {
@@ -33,6 +35,16 @@ namespace ApprovalTools.Approve.ViewModels
             if (Directory.Exists(target)) return;
             CreateDirectory(Path.GetDirectoryName(target));
             Directory.CreateDirectory(target);
+        }
+
+        public IEnumerable<string> GetPendingApprovals(string root)
+        {
+            var received = Directory.GetFiles(root, "*.received.*", SearchOption.AllDirectories);
+            return from file in received
+                select file.Replace(".received.", ".approved.")
+                into approved
+                where File.Exists(approved)
+                select Path.GetFileName(approved).Replace(".approved.", ".*.");
         }
     }
 }

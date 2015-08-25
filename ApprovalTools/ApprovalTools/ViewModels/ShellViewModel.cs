@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using ApprovalTools.Approve.Properties;
 using Caliburn.Micro;
@@ -11,12 +13,15 @@ namespace ApprovalTools.Approve.ViewModels
     {
         private readonly Araxis _araxis = new Araxis();
         private readonly FileManager _fm = new FileManager();
+        private List<string> _approvalsPending;
+        private bool _canAraxisCompareAllFiles;
         private bool _canAraxisCompareFolders;
 
         public ShellViewModel()
         {
             CanAraxisCompareFolders = true;
             DisplayName = "Approve";
+            UpdateUi();
         }
 
         [PublicAPI]
@@ -39,6 +44,50 @@ namespace ApprovalTools.Approve.ViewModels
             {
                 Settings.Default.RootFolder = value;
                 Settings.Default.Save();
+                NotifyOfPropertyChange();
+
+                UpdateUi();
+            }
+        }
+
+        private void UpdateUi()
+        {
+            if (Directory.Exists(RootFolder))
+            {
+                CanAraxisCompareFolders = true;
+                CanAraxisCompareAllFiles = true;
+                ApprovalsPending = _fm
+                    .GetPendingApprovals(RootFolder)
+                    .ToList();
+            }
+            else
+            {
+                ApprovalsPending = new List<string>();
+                CanAraxisCompareFolders = false;
+                CanAraxisCompareAllFiles = false;
+            }
+        }
+
+        [PublicAPI]
+        public List<string> ApprovalsPending
+        {
+            get { return _approvalsPending; }
+            set
+            {
+                if (Equals(value, _approvalsPending)) return;
+                _approvalsPending = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        [PublicAPI]
+        public bool CanAraxisCompareAllFiles
+        {
+            get { return _canAraxisCompareAllFiles; }
+            set
+            {
+                if (value == _canAraxisCompareAllFiles) return;
+                _canAraxisCompareAllFiles = value;
                 NotifyOfPropertyChange();
             }
         }
