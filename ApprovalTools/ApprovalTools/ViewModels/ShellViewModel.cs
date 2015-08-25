@@ -98,14 +98,15 @@ namespace ApprovalTools.Approve.ViewModels
         [PublicAPI]
         public void AraxisCompareAllFiles()
         {
-            var received = Directory.GetFiles(RootFolder, "*.received.*", SearchOption.AllDirectories);
-            foreach (var file in received)
+            var receivedFiles = Directory.GetFiles(
+                RootFolder, "*.received.*", SearchOption.AllDirectories);
+            foreach (var received in receivedFiles)
             {
-                var approved = file.Replace(".received.", ".approved.");
+                var approved = received.Replace(".received.", ".approved.");
                 if (File.Exists(approved))
                 {
                     Process.Start(Settings.Default.Araxis,
-                        string.Format("\"{0}\" \"{1}\"", approved, file));
+                        string.Format("\"{0}\" \"{1}\"", received, approved));
                 }
             }
         }
