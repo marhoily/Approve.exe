@@ -2,7 +2,7 @@
 using System.Threading;
 using Merge70;
 
-namespace ApprovalTools.ViewModels
+namespace ApprovalTools.Approve.ViewModels
 {
     public sealed class Araxis
     {

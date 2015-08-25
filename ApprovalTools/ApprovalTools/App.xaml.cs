@@ -1,4 +1,4 @@
-﻿namespace ApprovalTools
+﻿namespace ApprovalTools.Approve
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace ApprovalTools.ViewModels
+namespace ApprovalTools.Approve.ViewModels
 {
     public sealed class Hooks : IDisposable
     {

@@ -1,4 +1,4 @@
-﻿namespace ApprovalTools.Views
+﻿namespace ApprovalTools.Approve.Views
 {
     public partial class ShellView 
     {

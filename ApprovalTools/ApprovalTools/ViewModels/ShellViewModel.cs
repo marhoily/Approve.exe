@@ -1,16 +1,16 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using ApprovalTools.Approve.Properties;
 using Caliburn.Micro;
 using JetBrains.Annotations;
 
-namespace ApprovalTools.ViewModels
+namespace ApprovalTools.Approve.ViewModels
 {
     public sealed class ShellViewModel : PropertyChangedBase, IHaveDisplayName
     {
-        private const string Root = @"C:\srcroot\dpb.new";
         private readonly Araxis _araxis = new Araxis();
-        private readonly FileManager _fm = new FileManager(Root);
+        private readonly FileManager _fm = new FileManager();
         private bool _canAraxisCompareFolders;
 
         public ShellViewModel()
@@ -32,19 +32,30 @@ namespace ApprovalTools.ViewModels
         }
 
         [PublicAPI]
+        public string RootFolder
+        {
+            get { return Settings.Default.RootFolder; }
+            set
+            {
+                Settings.Default.RootFolder = value;
+                Settings.Default.Save();
+                NotifyOfPropertyChange();
+            }
+        }
+
+        [PublicAPI]
         public string DisplayName { get; set; }
 
         [PublicAPI]
         public void AraxisCompareAllFiles()
         {
-            var araxis = @"C:\Program Files\Araxis\Araxis Merge\compare.exe";
-            var received = Directory.GetFiles(@"C:\srcroot\dpb.new", "*.received.*", SearchOption.AllDirectories);
+            var received = Directory.GetFiles(RootFolder, "*.received.*", SearchOption.AllDirectories);
             foreach (var file in received)
             {
                 var approved = file.Replace(".received.", ".approved.");
                 if (File.Exists(approved))
                 {
-                    Process.Start(araxis,
+                    Process.Start(Settings.Default.Araxis,
                         string.Format("\"{0}\" \"{1}\"", approved, file));
                 }
             }
@@ -57,7 +68,7 @@ namespace ApprovalTools.ViewModels
 
             ThreadPool.QueueUserWorkItem(c =>
             {
-                _araxis.Compare(_fm.PutReceivedFiles(), Root);
+                _araxis.Compare(_fm.PutReceivedFiles(RootFolder), RootFolder);
                 CanAraxisCompareFolders = true;
             });
         }

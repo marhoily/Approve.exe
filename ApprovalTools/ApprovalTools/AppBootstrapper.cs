@@ -1,8 +1,8 @@
 ﻿using System.Windows;
+using ApprovalTools.Approve.ViewModels;
 using Caliburn.Micro;
-using ApprovalTools.ViewModels;
 
-namespace ApprovalTools
+namespace ApprovalTools.Approve
 {
     public class AppBootstrapper : BootstrapperBase
     {
