@@ -5,14 +5,37 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         Icon="../App.ico"
              mc:Ignorable="d" Width="300" Height="300">
-	<StackPanel Orientation="Vertical">
-        <TextBox x:Name="RootFolder"/>
-        <ListBox x:Name="ApprovalsPending"/>
-        <Button x:Name="AraxisCompareAllFiles" Content="Compare "
-                VerticalAlignment="Center" HorizontalAlignment="Center"
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Root folder: " VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" x:Name="RootFolder" VerticalAlignment="Center"/>
+        </Grid>
+        <ListBox Grid.Row="1" x:Name="ApprovalsPending" Margin="2" MinHeight="50"/>
+        <Button Grid.Row="2" x:Name="AraxisCompareAllFiles" Content="Compare Files"
+                HorizontalAlignment="Left"
+                Margin="2"
                 Padding="15,2"/>
-        <Button x:Name="AraxisCompareFolders" Content="Araxis"
-                VerticalAlignment="Center" HorizontalAlignment="Center"
+        <Button Grid.Row="3" x:Name="AraxisCompareFolders" Content="Compare Folders"
+                HorizontalAlignment="Left"
+                Margin="2"
                 Padding="15,2"/>
-	</StackPanel>
+        <Button Grid.Row="2" x:Name="RefreshList" Content="Refresh"
+                HorizontalAlignment="Right"
+                Margin="2"
+                Padding="15,2"/>
+        <Button Grid.Row="3" x:Name="ApproveAll" Content="Approve All"
+                HorizontalAlignment="Right"
+                Margin="2"
+                Padding="15,2"/>
+    </Grid>
 </Window>

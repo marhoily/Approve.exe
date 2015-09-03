@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 
 namespace ApprovalTools.Approve.ViewModels
 {
-    public sealed class ShellViewModel : PropertyChangedBase, IHaveDisplayName
+    public sealed class ShellViewModel : Screen
     {
         private readonly Araxis _araxis = new Araxis();
         private readonly FileManager _fm = new FileManager();
@@ -21,7 +21,7 @@ namespace ApprovalTools.Approve.ViewModels
         {
             CanAraxisCompareFolders = true;
             DisplayName = "Approve";
-            UpdateUi();
+            RefreshList();
         }
 
         [PublicAPI]
@@ -46,11 +46,12 @@ namespace ApprovalTools.Approve.ViewModels
                 Settings.Default.Save();
                 NotifyOfPropertyChange();
 
-                UpdateUi();
+                RefreshList();
             }
         }
 
-        private void UpdateUi()
+        [PublicAPI]
+        public void RefreshList()
         {
             if (Directory.Exists(RootFolder))
             {
@@ -92,8 +93,8 @@ namespace ApprovalTools.Approve.ViewModels
             }
         }
 
-        [PublicAPI]
-        public string DisplayName { get; set; }
+        //[PublicAPI]
+        //public string DisplayName { get; set; }
 
         [PublicAPI]
         public void AraxisCompareAllFiles()
@@ -121,6 +122,22 @@ namespace ApprovalTools.Approve.ViewModels
                 _araxis.Compare(_fm.PutReceivedFiles(RootFolder), RootFolder);
                 CanAraxisCompareFolders = true;
             });
+        }
+        [PublicAPI]
+        public void ApproveAll()
+        {
+            var receivedFiles = Directory.GetFiles(
+                RootFolder, "*.received.*", SearchOption.AllDirectories);
+            foreach (var received in receivedFiles)
+            {
+                var approved = received.Replace(".received.", ".approved.");
+                if (File.Exists(approved))
+                {
+                    File.Delete(approved);
+                    File.Move(received, approved);
+                }
+            }
+            RefreshList();
         }
     }
 }
