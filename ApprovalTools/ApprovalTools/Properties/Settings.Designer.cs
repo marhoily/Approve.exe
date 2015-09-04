@@ -43,5 +43,17 @@ namespace ApprovalTools.Approve.Properties {
                 return ((string)(this["Araxis"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("[]")]
+        public string Folders {
+            get {
+                return ((string)(this["Folders"]));
+            }
+            set {
+                this["Folders"] = value;
+            }
+        }
     }
 }

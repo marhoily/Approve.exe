@@ -8,5 +8,8 @@
     <Setting Name="Araxis" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\Program Files\Araxis\Araxis Merge\compare.exe</Value>
     </Setting>
+    <Setting Name="Folders" Type="System.String" Scope="User">
+      <Value Profile="(Default)">[]</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

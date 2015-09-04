@@ -6,24 +6,18 @@ namespace ApprovalTools.Approve.ViewModels
 {
     public sealed class Araxis
     {
-        public void Compare(string folder1, string folder2)
+        private Application _app;
+
+        public void StartSession()
         {
             Kill("merge");
-
-            var app = new Application();
-
-            ShowComparison(app, folder1, folder2);
-
-            while (app.Visible) Thread.Sleep(100);
-            ActivateFilter(app, "Default");
-            app.Close();
+            _app = new Application();
         }
-
-        private static void ShowComparison(IApplication3 app, string folder1, string folder2)
+        public void Compare(string folder1, string folder2)
         {
-            ActivateFilter(app, "Approvals");
-            app.Preferences.Longs["ShowUnchanged"] = 0;
-            var folderComparison = app.FolderComparison;
+            ActivateFilter(_app, "Approvals");
+            _app.Preferences.Longs["ShowUnchanged"] = 0;
+            var folderComparison = _app.FolderComparison;
             while (folderComparison.Busy) Thread.Sleep(100);
             folderComparison.SetPanelTitles("approved", "received");
             folderComparison.Active = true;
@@ -31,12 +25,19 @@ namespace ApprovalTools.Approve.ViewModels
             folderComparison.Compare(folder1, folder2);
             while (folderComparison.Busy) Thread.Sleep(100);
             folderComparison.Active = true;
-            app.Preferences.Longs["ShowUnchanged"] = 0;
+            _app.Preferences.Longs["ShowUnchanged"] = 0;
             folderComparison.HideEmptyFolders();
             folderComparison.Active = true;
-            app.Visible = true;
-            app.Active = true;
-            app.Maximized = true;
+            _app.Visible = true;
+            _app.Active = true;
+            _app.Maximized = true;
+        }
+
+        public void Wait()
+        {
+            while (_app.Visible) Thread.Sleep(100);
+            ActivateFilter(_app, "Default");
+            _app.Close();
         }
 
         private static void Kill(string processName)

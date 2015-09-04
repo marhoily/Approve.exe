@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,8 @@ using System.Threading;
 using ApprovalTools.Approve.Properties;
 using Caliburn.Micro;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
+using Ookii.Dialogs.Wpf;
 
 namespace ApprovalTools.Approve.ViewModels
 {
@@ -20,7 +23,13 @@ namespace ApprovalTools.Approve.ViewModels
         public ShellViewModel()
         {
             CanAraxisCompareFolders = true;
+            CanAraxisCompareAllFiles = true;
+
             DisplayName = "Approve";
+            Folders = new ObservableCollection<FolderViewModel>(
+                JsonConvert.DeserializeObject<FolderViewModel[]>(
+                Settings.Default.Folders));
+            
             RefreshList();
         }
 
@@ -37,36 +46,15 @@ namespace ApprovalTools.Approve.ViewModels
         }
 
         [PublicAPI]
-        public string RootFolder
-        {
-            get { return Settings.Default.RootFolder; }
-            set
-            {
-                Settings.Default.RootFolder = value;
-                Settings.Default.Save();
-                NotifyOfPropertyChange();
-
-                RefreshList();
-            }
-        }
+        public ObservableCollection<FolderViewModel> Folders { get; private set; }
 
         [PublicAPI]
         public void RefreshList()
         {
-            if (Directory.Exists(RootFolder))
-            {
-                CanAraxisCompareFolders = true;
-                CanAraxisCompareAllFiles = true;
-                ApprovalsPending = _fm
-                    .GetPendingApprovals(RootFolder)
-                    .ToList();
-            }
-            else
-            {
-                ApprovalsPending = new List<string>();
-                CanAraxisCompareFolders = false;
-                CanAraxisCompareAllFiles = false;
-            }
+
+            ApprovalsPending = Folders
+                .SelectMany(f => f.GetApprovalsPending())
+                .ToList();
         }
 
         [PublicAPI]
@@ -93,22 +81,14 @@ namespace ApprovalTools.Approve.ViewModels
             }
         }
 
-        //[PublicAPI]
-        //public string DisplayName { get; set; }
-
         [PublicAPI]
         public void AraxisCompareAllFiles()
         {
-            var receivedFiles = Directory.GetFiles(
-                RootFolder, "*.received.*", SearchOption.AllDirectories);
-            foreach (var received in receivedFiles)
+            foreach (var diff in Folders
+                .SelectMany(f => f.GetAllDifferences()))
             {
-                var approved = received.Replace(".received.", ".approved.");
-                if (File.Exists(approved))
-                {
-                    Process.Start(Settings.Default.Araxis,
-                        string.Format("\"{0}\" \"{1}\"", received, approved));
-                }
+                Process.Start(Settings.Default.Araxis,
+                    string.Format("\"{0}\" \"{1}\"", diff.Item1, diff.Item2));
             }
         }
 
@@ -119,24 +99,33 @@ namespace ApprovalTools.Approve.ViewModels
 
             ThreadPool.QueueUserWorkItem(c =>
             {
-                _araxis.Compare(_fm.PutReceivedFiles(RootFolder), RootFolder);
+                _araxis.StartSession();
+                foreach (var f in Folders.Where(f => f.GetAllDifferences().Any()))
+                    _araxis.Compare(_fm.PutReceivedFiles(f.Path), f.Path);
+                _araxis.Wait();
                 CanAraxisCompareFolders = true;
             });
         }
         [PublicAPI]
         public void ApproveAll()
         {
-            var receivedFiles = Directory.GetFiles(
-                RootFolder, "*.received.*", SearchOption.AllDirectories);
-            foreach (var received in receivedFiles)
+            foreach (var diff in Folders.SelectMany(f => f.GetAllDifferences()))
             {
-                var approved = received.Replace(".received.", ".approved.");
-                if (File.Exists(approved))
-                {
-                    File.Delete(approved);
-                    File.Move(received, approved);
-                }
+                File.Delete(diff.Item2);
+                File.Move(diff.Item1, diff.Item2);
             }
+        
+            RefreshList();
+        }
+
+        [PublicAPI]
+        public void AddFolder()
+        {
+            var dlg = new VistaFolderBrowserDialog();
+            if (dlg.ShowDialog() != true) return;
+            Folders.Add(new FolderViewModel(dlg.SelectedPath) { IsEnabled = true });
+            Settings.Default.Folders = JsonConvert.SerializeObject(Folders);
+            Settings.Default.Save();
             RefreshList();
         }
     }
