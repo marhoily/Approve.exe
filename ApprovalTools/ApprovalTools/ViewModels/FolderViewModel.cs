@@ -34,5 +34,16 @@ namespace ApprovalTools.Approve.ViewModels
                 where File.Exists(approved)
                 select Tuple.Create(received, approved);
         }
+
+        public IEnumerable<Tuple<string, string>> GetAllHanging()
+        {
+            if (!IsEnabled || !Exists) return Enumerable.Empty<Tuple<string, string>>();
+            var receivedFiles = Directory.GetFiles(
+                Path, "*.received.*", SearchOption.AllDirectories);
+            return from received in receivedFiles
+                let approved = received.Replace(".received.", ".approved.")
+                where !File.Exists(approved)
+                select Tuple.Create(received, approved);
+        }
     }
 }

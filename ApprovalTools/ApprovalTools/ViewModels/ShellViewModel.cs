@@ -130,6 +130,17 @@ namespace ApprovalTools.Approve.ViewModels
         }
 
         [PublicAPI]
+        public void ApproveAllHanging()
+        {
+            foreach (var diff in Folders.SelectMany(f => f.GetAllHanging()))
+            {
+                File.Move(diff.Item1, diff.Item2);
+            }
+
+            RefreshList();
+        }
+
+        [PublicAPI]
         public void AddFolder()
         {
             var dlg = new VistaFolderBrowserDialog();

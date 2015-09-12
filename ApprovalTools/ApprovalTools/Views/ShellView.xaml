@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         Icon="../App.ico"
-             mc:Ignorable="d" Width="300" Height="300">
+             mc:Ignorable="d" Width="416.691" Height="438.897">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -31,6 +32,8 @@
         <Button Grid.Row="6" x:Name="ApproveAll" Content="Approve All"
                 HorizontalAlignment="Right" Margin="2" Padding="15,2"/>
         <Button Grid.Row="7" x:Name="RejectAll" Content="Reject All"
+                HorizontalAlignment="Right" Margin="2" Padding="15,2"/>
+        <Button Grid.Row="7" x:Name="ApproveAllHanging" Content="Approve All Hanging"
                 HorizontalAlignment="Right" Margin="2" Padding="15,2"/>
     </Grid>
 </Window>
