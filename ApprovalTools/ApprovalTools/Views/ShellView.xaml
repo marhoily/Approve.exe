@@ -32,7 +32,7 @@
         <Button Grid.Row="6" x:Name="ApproveAll" Content="Approve All"
                 HorizontalAlignment="Right" Margin="2" Padding="15,2"/>
         <Button Grid.Row="7" x:Name="RejectAll" Content="Reject All"
-                HorizontalAlignment="Right" Margin="2" Padding="15,2"/>
+                HorizontalAlignment="Left" Margin="2" Padding="15,2"/>
         <Button Grid.Row="7" x:Name="ApproveAllHanging" Content="Approve All Hanging"
                 HorizontalAlignment="Right" Margin="2" Padding="15,2"/>
     </Grid>
