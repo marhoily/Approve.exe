@@ -119,6 +119,17 @@ namespace ApprovalTools.Approve.ViewModels
         }
 
         [PublicAPI]
+        public void RejectAll()
+        {
+            foreach (var diff in Folders.SelectMany(f => f.GetAllDifferences()))
+            {
+                File.Delete(diff.Item1);
+            }
+        
+            RefreshList();
+        }
+
+        [PublicAPI]
         public void AddFolder()
         {
             var dlg = new VistaFolderBrowserDialog();
