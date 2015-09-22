@@ -1,15 +1,18 @@
 ﻿<Application xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:application="clr-namespace:ApprovalTools"
              xmlns:approve="clr-namespace:ApprovalTools.Approve"
+             xmlns:utilities="clr-namespace:ApprovalTools.Approve.Utilities"
              x:Class="ApprovalTools.Approve.App">
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary>
-					<approve:AppBootstrapper x:Key="Bootstrapper" />
-				</ResourceDictionary>
-			</ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <approve:AppBootstrapper x:Key="Bootstrapper" />
+                    <utilities:CaliburnContentLoader x:Key="CaliburnContentLoader" />
+                </ResourceDictionary>
+                <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.xaml" />
+                <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Light.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>
