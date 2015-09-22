@@ -1,13 +1,13 @@
-﻿namespace ApprovalTools.Approve
+﻿using FirstFloor.ModernUI.Presentation;
+
+namespace ApprovalTools.Approve
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : System.Windows.Application
+    public partial class App
     {
         public App()
         {
             InitializeComponent();
+            AppearanceManager.Current.ThemeSource = AppearanceManager.DarkThemeSource;
         }
     }
 }

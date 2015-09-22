@@ -1,47 +1,46 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using FirstFloor.ModernUI.Presentation;
+using JetBrains.Annotations;
 
 namespace ApprovalTools.Approve.ViewModels
 {
-    public class SettingsViewModel : Screen
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    public sealed class SettingsViewModel : Screen
     {
+        private Uri _selectedSource = new Uri("/Views/SettingsAppearanceView.xaml", UriKind.Relative);
         private string _statusMessage;
-        private System.Uri _selectedSource = new System.Uri("/Views/SettingsAppearanceView.xaml", System.UriKind.Relative);
 
         public SettingsViewModel()
         {
-            this.TabLinks = new LinkCollection(new Link[] { 
-                new Link()
+            TabLinks = new LinkCollection(new[]
+            {
+                new Link
                 {
                     DisplayName = "appearance",
-                    Source = new System.Uri("/Views/SettingsAppearanceView.xaml", System.UriKind.Relative)
+                    Source = new Uri("/Views/SettingsAppearanceView.xaml", UriKind.Relative)
                 },
-                new Link()
+                new Link
                 {
                     DisplayName = "about",
-                    Source = new System.Uri("/Views/AboutView.xaml", System.UriKind.Relative)
+                    Source = new Uri("/Views/AboutView.xaml", UriKind.Relative)
                 }
-            });            
+            });
         }
 
-        public LinkCollection TabLinks
-        {
-            get;
-            set;
-        }
+        public LinkCollection TabLinks { get; set; }
 
-        public System.Uri SelectedSource
+        public Uri SelectedSource
         {
             get { return _selectedSource; }
             set
             {
-                if (this._selectedSource != value)
+                if (_selectedSource != value)
                 {
-                    this._selectedSource = value;
-                    this.NotifyOfPropertyChange("StatusMessage");
+                    _selectedSource = value;
+                    NotifyOfPropertyChange(() => SelectedSource);
                 }
             }
         }
-
     }
 }

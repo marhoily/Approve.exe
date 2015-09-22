@@ -47,7 +47,6 @@ namespace ApprovalTools.Approve.ViewModels
 
         public SettingsAppearanceViewModel()
         {
-            // add the default themes
             _themes.Add(new Link {DisplayName = "dark", Source = AppearanceManager.DarkThemeSource});
             _themes.Add(new Link {DisplayName = "light", Source = AppearanceManager.LightThemeSource});
 
