@@ -17,10 +17,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Folders: " VerticalAlignment="Center" Margin="2,2,2,0"/>
-        <ItemsControl Grid.Row="1" x:Name="Folders" Margin="2" MinHeight="40"/>
-        <Button x:Name="AddFolder" Content="Add Folder" Padding="15,2"
-                Grid.Row="2" HorizontalAlignment="Right"/>
+        <ContentControl x:Name="FoldersToWatchViewModel"/>
         <TextBlock Grid.Row="3" Text="Differences: " VerticalAlignment="Center" Margin="2,2,2,0"/>
         <ListBox Grid.Row="4" x:Name="ApprovalsPending" Margin="2" MinHeight="50"/>
         <Button Grid.Row="5" x:Name="AraxisCompareAllFiles" Content="Compare Files"

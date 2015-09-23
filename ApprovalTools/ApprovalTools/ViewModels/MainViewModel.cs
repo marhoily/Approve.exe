@@ -9,8 +9,6 @@ using ApprovalTools.Approve.Properties;
 using Caliburn.Micro;
 using JetBrains.Annotations;
 using MoreLinq;
-using Newtonsoft.Json;
-using Ookii.Dialogs.Wpf;
 
 namespace ApprovalTools.Approve.ViewModels
 {
@@ -21,19 +19,20 @@ namespace ApprovalTools.Approve.ViewModels
         private List<DifferenceViewModel> _approvalsPending;
         private bool _canAraxisCompareAllFiles;
         private bool _canAraxisCompareFolders;
+        private ObservableCollection<FolderViewModel> Folders { get { return FoldersToWatchViewModel.Folders; } }
 
         public MainViewModel()
         {
             CanAraxisCompareFolders = true;
             CanAraxisCompareAllFiles = true;
-
-            Folders = new ObservableCollection<FolderViewModel>(
-                JsonConvert.DeserializeObject<FolderViewModel[]>(
-                    Settings.Default.Folders).DistinctBy(x => x.Path));
+            FoldersToWatchViewModel = new FoldersToWatchViewModel();
             StartTimer();
         }
 
-        [PublicAPI]
+        [UsedImplicitly]
+        public FoldersToWatchViewModel FoldersToWatchViewModel { get; private set; }
+
+        [UsedImplicitly]
         public bool CanAraxisCompareFolders
         {
             get { return _canAraxisCompareFolders; }
@@ -45,10 +44,8 @@ namespace ApprovalTools.Approve.ViewModels
             }
         }
 
-        [PublicAPI]
-        public ObservableCollection<FolderViewModel> Folders { get; private set; }
 
-        [PublicAPI]
+        [UsedImplicitly]
         public List<DifferenceViewModel> ApprovalsPending
         {
             get { return _approvalsPending; }
@@ -60,7 +57,7 @@ namespace ApprovalTools.Approve.ViewModels
             }
         }
 
-        [PublicAPI]
+        [UsedImplicitly]
         public bool CanAraxisCompareAllFiles
         {
             get { return _canAraxisCompareAllFiles; }
@@ -90,7 +87,7 @@ namespace ApprovalTools.Approve.ViewModels
             Folders.ForEach(f => f.IsDirty = false);
         }
 
-        [PublicAPI]
+        [UsedImplicitly]
         public void RefreshList()
         {
             ApprovalsPending = Folders
@@ -98,7 +95,7 @@ namespace ApprovalTools.Approve.ViewModels
                 .ToList();
         }
 
-        [PublicAPI]
+        [UsedImplicitly]
         public void AraxisCompareAllFiles()
         {
             foreach (var diff in Folders.SelectMany(f => f.ApprovalPending))
@@ -106,7 +103,7 @@ namespace ApprovalTools.Approve.ViewModels
                     string.Format("\"{0}\" \"{1}\"", diff.Received, diff.Approved));
         }
 
-        [PublicAPI]
+        [UsedImplicitly]
         public void AraxisCompareFolders()
         {
             CanAraxisCompareFolders = false;
@@ -121,40 +118,25 @@ namespace ApprovalTools.Approve.ViewModels
             });
         }
 
-        [PublicAPI]
+        [UsedImplicitly]
         public void ApproveAll()
         {
             foreach (var diff in Folders.SelectMany(f => f.ApprovalPending))
                 diff.Approve();
         }
 
-        [PublicAPI]
+        [UsedImplicitly]
         public void RejectAll()
         {
             foreach (var diff in Folders.SelectMany(f => f.ApprovalPending))
                 diff.Reject();
         }
 
-        [PublicAPI]
+        [UsedImplicitly]
         public void ApproveAllHanging()
         {
             foreach (var diff in Folders.SelectMany(f => f.Hanging))
                 diff.Approve();
-        }
-
-        [PublicAPI]
-        public void AddFolder()
-        {
-            var dlg = new VistaFolderBrowserDialog();
-            if (dlg.ShowDialog() != true) return;
-            Folders.Add(
-                new FolderViewModel(dlg.SelectedPath)
-                {
-                    IsEnabled = true,
-                    IsDirty = true
-                });
-            Settings.Default.Folders = JsonConvert.SerializeObject(Folders);
-            Settings.Default.Save();
         }
     }
 }
