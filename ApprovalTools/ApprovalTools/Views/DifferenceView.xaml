@@ -7,5 +7,46 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" 
              d:DataContext="{d:DesignInstance viewModels:DifferenceViewModel}">
-    <TextBlock Text="{Binding DisplayName}"/>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <CheckBox IsChecked="{Binding IsChecked}"/>
+        <Ellipse Grid.Column="1" Width="10" Height="10" Fill="DarkOrange"
+                 Stroke="SaddleBrown" StrokeThickness="1"
+                 VerticalAlignment="Center" Margin="1"/>
+        <Ellipse Grid.Column="2" Width="10" Height="10" Fill="DarkOrange"
+                 Stroke="SaddleBrown" StrokeThickness="1"
+                 VerticalAlignment="Center" Margin="1">
+            <Ellipse.Style>
+                <Style TargetType="Ellipse">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsHanging}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Ellipse.Style>
+        </Ellipse>
+        <TextBlock Grid.Column="4" Text="{Binding DisplayName}"
+                   VerticalAlignment ="Center"/>
+        <Button Grid.Column="5" VerticalAlignment ="Center"
+                HorizontalAlignment="Center" Padding="9" Margin="1">
+            <Button.Content>
+                <Canvas>
+                    <Canvas.RenderTransform>
+                        <ScaleTransform ScaleX=".3" ScaleY=".3"/>
+                    </Canvas.RenderTransform>
+                    <Path Fill="#FFC15454" Canvas.Top="-52" Canvas.Left="-45" Data="F 1 M 60.762,69.212 L 42.519,69.212 C 42.352,69.212 42.187,69.184 42.03,69.13 38.5,67.912 38.5,66.52 38.5,66.062 L 38.5,49.295 C 38.5,48.896 38.659,48.514 38.941,48.233 40.96,46.222 44.877,41.816 45.217,40.652 45.391,40.059 45.533,39.391 45.683,38.684 46.23,36.113 46.979,32.591 50.246,32.591 51.727,32.591 53.076,33.451 54.046,35.013 55.349,37.114 56.021,40.794 54.882,44.581 L 62.844,44.581 C 64.939,44.581 66.833,45.856 67.669,47.829 68.307,49.331 68.212,50.971 67.458,52.373 68.075,53.248 68.306,54.432 68.042,55.685 67.824,56.72 67.321,57.571 66.644,58.137 66.921,59.023 66.911,60.052 66.582,61.119 66.299,62.038 65.757,62.962 65.017,63.57 65.121,64.289 65.015,65.088 64.692,65.902 64.038,67.547 62.479,69.212 60.762,69.212 Z M 42.782,66.212 L 60.733,66.212 C 61.008,66.134 61.745,65.441 61.995,64.525 62.081,64.213 62.078,63.935 61.988,63.851 61.511,63.401 61.383,62.693 61.67,62.104 61.937,61.554 62.522,61.23 63.107,61.263 63.327,61.104 63.762,60.474 63.829,59.665 63.857,59.314 63.82,58.848 63.48,58.617 62.9,58.223 62.67,57.48 62.926,56.828 63.183,56.176 63.858,55.79 64.549,55.893 64.55,55.893 64.551,55.893 64.552,55.893 64.731,55.893 65.002,55.571 65.108,55.068 65.2,54.632 65.139,54.099 64.847,53.971 64.398,53.773 64.075,53.368 63.98,52.887 63.885,52.406 64.032,51.908 64.374,51.555 65.39,50.504 65.087,49.418 64.909,49 64.544,48.138 63.733,47.581 62.846,47.581 L 52.683,47.581 C 52.164,47.581 51.682,47.313 51.409,46.872 51.136,46.431 51.109,45.88 51.34,45.415 52.982,42.103 52.662,38.47 51.498,36.594 51.102,35.956 50.646,35.591 50.248,35.591 49.472,35.591 49.067,37.202 48.619,39.308 48.464,40.038 48.304,40.794 48.098,41.496 47.469,43.64 42.946,48.421 41.501,49.908 L 41.501,65.6 C 41.79,65.784 42.3,66.028 42.782,66.212 Z" d:IsLocked="True"/>
+                    <Path Fill="#FFC15454" Canvas.Top="-52" Canvas.Left="-45" Data="F 1 M 38.436,70.603 L 27.491,70.603 C 25.802,70.603 24.427,69.229 24.427,67.541 L 24.427,46.517 C 24.427,44.829 25.802,43.455 27.491,43.455 L 38.435,43.455 C 40.124,43.455 41.499,44.829 41.499,46.517 L 41.499,67.54 C 41.5,69.229 40.125,70.603 38.436,70.603 Z M 27.491,46.455 L 27.427,67.541 38.436,67.603 C 38.472,67.603 38.5,67.576 38.5,67.541 L 38.5,46.517 27.491,46.455 Z" d:IsLocked="True" />
+                </Canvas>
+            </Button.Content>
+        </Button>
+
+    </Grid>
 </UserControl>

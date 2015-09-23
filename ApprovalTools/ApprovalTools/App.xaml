@@ -8,6 +8,7 @@
 			<ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <approve:AppBootstrapper x:Key="Bootstrapper" />
+                    <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
                     <utilities:CaliburnContentLoader x:Key="CaliburnContentLoader" />
                 </ResourceDictionary>
                 <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.xaml" />

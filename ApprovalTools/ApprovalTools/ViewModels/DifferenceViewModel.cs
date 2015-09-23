@@ -11,6 +11,7 @@ namespace ApprovalTools.Approve.ViewModels
         public string Received { get; private set; }
         public string Approved { get; private set; }
         public bool IsHanging { get { return !File.Exists(Approved); } }
+        public bool IsChecked { get; set; }
 
         public string DisplayName
         {
