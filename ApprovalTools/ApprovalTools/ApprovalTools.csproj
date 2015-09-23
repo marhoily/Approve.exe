@@ -98,6 +98,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Utilities\AutoDisposable.cs" />
     <Compile Include="Utilities\CaliburnContentLoader.cs" />
     <Compile Include="Utilities\Araxis.cs" />
     <Compile Include="Utilities\FileManager.cs" />

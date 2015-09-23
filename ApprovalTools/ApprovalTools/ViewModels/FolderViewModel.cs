@@ -7,87 +7,44 @@ using JetBrains.Annotations;
 
 namespace ApprovalTools.Approve.ViewModels
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public sealed class FolderViewModel : IDisposable
     {
-        public string Path { get; private set; }
-        public bool Exists { get { return Directory.Exists(Path); } }
-        public bool IsEnabled { get; set; }
-        public bool IsDirty { get; set; }
-        private readonly FileSystemWatcher _receivedWatcher;
-        private readonly FileSystemWatcher _approvedWatcher;
-        private List<DifferenceViewModel> _differencesCache;
+        private readonly FileManager _fm = new FileManager();
+        private List<DifferenceViewModel> _buffer;
+        private readonly IDisposable _watcher;
 
-        public FolderViewModel([NotNull]string path)
+        public FolderViewModel([NotNull] string path)
         {
             Path = path;
-            _receivedWatcher = FileSystemWatcher(path, "*.received.*");
-            _approvedWatcher = FileSystemWatcher(path, "*.approved.*");
+            _watcher = _fm.Watch(path,
+                () =>
+                {
+                    IsDirty = true;
+                    _buffer = null;
+                });
         }
 
-        private FileSystemWatcher FileSystemWatcher(string path, string received)
-        {
-            var w = new FileSystemWatcher(path, received);
-            FileSystemEventHandler handler = (s, e) =>
-            {
-                IsDirty = true;
-                _differencesCache = null;
-            };
-            w.Created += handler;
-            w.Deleted += handler;
-            w.Renamed += (s, e) => handler(s, e);
-            w.IncludeSubdirectories = true;
-            w.NotifyFilter = NotifyFilters.FileName;
-            w.EnableRaisingEvents = true;
-            return w;
-        }
+        public string Path { get; private set; }
+        [UsedImplicitly]
+        public bool Exists { get { return Directory.Exists(Path); } }
+        [UsedImplicitly]
+        public bool IsEnabled { get; set; }
+        public bool IsDirty { get; set; }
 
-        public List<DifferenceViewModel> Buffer
+        private IEnumerable<DifferenceViewModel> Buffer
         {
             get
             {
-                return _differencesCache ?? (_differencesCache = (
-                    from received in Directory.GetFiles(
-                        Path, "*.received.*", SearchOption.AllDirectories)
-                    let approved = received.Replace(".received.", ".approved.")
-                    select new DifferenceViewModel(received, approved)
-                    ).ToList());
+                if (!IsEnabled || !Exists) return Enumerable.Empty<DifferenceViewModel>();
+                return _buffer ?? (_buffer 
+                    = _fm.GetDifferenceViewModels(Path).ToList());
             }
         }
 
-        public IEnumerable<DifferenceViewModel> All
-        {
-            get
-            {
-                return !IsEnabled || !Exists
-                    ? Enumerable.Empty<DifferenceViewModel>()
-                    : Buffer;
-            }
-        }
-        public IEnumerable<DifferenceViewModel> Hanging
-        {
-            get
-            {
-                return !IsEnabled || !Exists
-                    ? Enumerable.Empty<DifferenceViewModel>()
-                    : Buffer.Where(x => x.IsHanging);
-            }
-        }
-        public IEnumerable<DifferenceViewModel> ApprovalPending
-        {
-            get
-            {
-                return !IsEnabled || !Exists
-                    ? Enumerable.Empty<DifferenceViewModel>()
-                    : Buffer.Where(x => !x.IsHanging);
-            }
-        }
-        public void Dispose()
-        {
-            _receivedWatcher.Dispose();
-            _approvedWatcher.Dispose();
-        }
-
+        public IEnumerable<DifferenceViewModel> All { get { return Buffer; } }
+        public IEnumerable<DifferenceViewModel> Hanging { get { return Buffer.Where(x => x.IsHanging); } }
+        public IEnumerable<DifferenceViewModel> ApprovalPending { get { return Buffer.Where(x => !x.IsHanging); } }
+        public void Dispose() { _watcher.Dispose(); }
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context) { IsDirty = true; }
     }
