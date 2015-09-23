@@ -7,8 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Style="{StaticResource ContentRoot}">
-        <mui:ModernTab Layout="List" SelectedSource="{Binding Path=SelectedSource, UpdateSourceTrigger=PropertyChanged}"
-                                     ContentLoader="{StaticResource CaliburnContentLoader}"
-                                     Links="{Binding Path=TabLinks, UpdateSourceTrigger=PropertyChanged}" />
+        <mui:ModernTab Layout="List" 
+                       SelectedSource="{Binding Path=SelectedSource, UpdateSourceTrigger=PropertyChanged}"
+                       ContentLoader="{StaticResource CaliburnContentLoader}"
+                       Links="{Binding Path=TabLinks, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>
