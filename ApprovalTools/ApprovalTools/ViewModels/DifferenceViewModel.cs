@@ -8,14 +8,15 @@ namespace ApprovalTools.Approve.ViewModels
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public sealed class DifferenceViewModel
     {
-        private readonly string _received;
-        private readonly string _approved;
-        public bool IsHanging { get { return !File.Exists(_approved); }}
+        public string Received { get; private set; }
+        public string Approved { get; private set; }
+        public bool IsHanging { get { return !File.Exists(Approved); } }
+
         public string DisplayName
         {
             get
             {
-                var fileName = Path.GetFileName(_approved);
+                var fileName = Path.GetFileName(Approved);
                 Debug.Assert(fileName != null);
                 return fileName.Replace(".approved.", ".*.");
             }
@@ -23,18 +24,24 @@ namespace ApprovalTools.Approve.ViewModels
 
         public DifferenceViewModel(string received, string approved)
         {
-            _received = received;
-            _approved = approved;
+            Received = received;
+            Approved = approved;
         }
 
         public void Approve()
         {
             if (IsHanging)
             {
-                File.Move(_received, _approved);
+                File.Move(Received, Approved);
+            }
+            else
+            {
+                File.Delete(Approved);
+                File.Move(Received, Approved);
             }
         }
 
         public override string ToString() { return DisplayName; }
+        public void Reject() { File.Delete(Received); }
     }
 }

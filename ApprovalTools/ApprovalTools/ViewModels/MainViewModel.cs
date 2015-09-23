@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows.Threading;
 using ApprovalTools.Approve.Properties;
 using Caliburn.Micro;
 using JetBrains.Annotations;
+using MoreLinq;
 using Newtonsoft.Json;
 using Ookii.Dialogs.Wpf;
 
@@ -29,8 +31,8 @@ namespace ApprovalTools.Approve.ViewModels
             Folders = new ObservableCollection<FolderViewModel>(
                 JsonConvert.DeserializeObject<FolderViewModel[]>(
                     Settings.Default.Folders));
-            
-            RefreshList();
+
+            StartTimer();
         }
 
         [PublicAPI]
@@ -47,14 +49,6 @@ namespace ApprovalTools.Approve.ViewModels
 
         [PublicAPI]
         public ObservableCollection<FolderViewModel> Folders { get; private set; }
-
-        [PublicAPI]
-        public void RefreshList()
-        {
-            ApprovalsPending = Folders
-                .SelectMany(f => f.GetHangingItemsAndApprovalsPending())
-                .ToList();
-        }
 
         [PublicAPI]
         public List<DifferenceViewModel> ApprovalsPending
@@ -80,14 +74,39 @@ namespace ApprovalTools.Approve.ViewModels
             }
         }
 
+        private void StartTimer()
+        {
+            var dispatcherTimer = new DispatcherTimer(
+                TimeSpan.FromSeconds(1),
+                DispatcherPriority.Background,
+                OnTick,
+                Dispatcher.CurrentDispatcher);
+            dispatcherTimer.Start();
+            GC.KeepAlive(dispatcherTimer);
+        }
+
+        private void OnTick(object sender, EventArgs e)
+        {
+            if (!Folders.Any(f => f.IsDirty)) return;
+            RefreshList();
+            Folders.ForEach(f => f.IsDirty = false);
+        }
+
+        [PublicAPI]
+        public void RefreshList()
+        {
+            ApprovalsPending = Folders
+                .SelectMany(f => f.All)
+                .ToList();
+        }
+
         [PublicAPI]
         public void AraxisCompareAllFiles()
         {
-            foreach (var diff in Folders
-                .SelectMany(f => f.GetAllDifferences()))
+            foreach (var diff in Folders.SelectMany(f => f.ApprovalPending))
             {
                 Process.Start(Settings.Default.Araxis,
-                    string.Format("\"{0}\" \"{1}\"", diff.Item1, diff.Item2));
+                    string.Format("\"{0}\" \"{1}\"", diff.Received, diff.Approved));
             }
         }
 
@@ -99,44 +118,32 @@ namespace ApprovalTools.Approve.ViewModels
             ThreadPool.QueueUserWorkItem(c =>
             {
                 _araxis.StartSession();
-                foreach (var f in Folders.Where(f => f.GetAllDifferences().Any()))
+                foreach (var f in Folders.Where(f => f.ApprovalPending.Any()))
                     _araxis.Compare(_fm.PutReceivedFiles(f.Path), f.Path);
                 _araxis.Wait();
                 CanAraxisCompareFolders = true;
             });
         }
+
         [PublicAPI]
         public void ApproveAll()
         {
-            foreach (var diff in Folders.SelectMany(f => f.GetAllDifferences()))
-            {
-                File.Delete(diff.Item2);
-                File.Move(diff.Item1, diff.Item2);
-            }
-        
-            RefreshList();
+            foreach (var diff in Folders.SelectMany(f => f.ApprovalPending))
+                diff.Approve();
         }
 
         [PublicAPI]
         public void RejectAll()
         {
-            foreach (var diff in Folders.SelectMany(f => f.GetAllDifferences()))
-            {
-                File.Delete(diff.Item1);
-            }
-        
-            RefreshList();
+            foreach (var diff in Folders.SelectMany(f => f.ApprovalPending))
+                diff.Reject();
         }
 
         [PublicAPI]
         public void ApproveAllHanging()
         {
-            foreach (var diff in Folders.SelectMany(f => f.GetAllHanging()))
-            {
+            foreach (var diff in Folders.SelectMany(f => f.Hanging))
                 diff.Approve();
-            }
-
-            RefreshList();
         }
 
         [PublicAPI]
@@ -144,10 +151,14 @@ namespace ApprovalTools.Approve.ViewModels
         {
             var dlg = new VistaFolderBrowserDialog();
             if (dlg.ShowDialog() != true) return;
-            Folders.Add(new FolderViewModel(dlg.SelectedPath) { IsEnabled = true });
+            Folders.Add(
+                new FolderViewModel(dlg.SelectedPath)
+                {
+                    IsEnabled = true,
+                    IsDirty = true
+                });
             Settings.Default.Folders = JsonConvert.SerializeObject(Folders);
             Settings.Default.Save();
-            RefreshList();
         }
     }
 }
