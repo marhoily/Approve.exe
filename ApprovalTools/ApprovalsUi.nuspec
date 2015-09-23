@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>ApprovalsUi</id>
+        <version>1.0.2</version>
+        <title>Approvals UI</title>
+        <authors>ilm</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>UI for the ApprovalTest library, that is optimized to work with NCrunch, Araxis and VS Dark theme.</description>
+        <summary>UI for the ApprovalTest</summary>
+        <releaseNotes>Program checks for updates now</releaseNotes>
+        <language>en-US</language>
+        <tags>araxis approved received ncrunch approvals tests regression</tags>
+    </metadata>
+    <files>
+        <file src="ApprovalTools\bin\Release\ApprovalTools.Approve.exe" target="lib\net45\ApprovalTools.Approve.exe" />
+        <file src="ApprovalTools\bin\Release\ApprovalTools.Approve.exe.config" target="lib\net45\ApprovalTools.Approve.exe.config" />
+        <file src="ApprovalTools\bin\Release\Araxis.Merge.Foundation.dll" target="lib\net45\Araxis.Merge.Foundation.dll" />
+        <file src="ApprovalTools\bin\Release\Caliburn.Micro.dll" target="lib\net45\Caliburn.Micro.dll" />
+        <file src="ApprovalTools\bin\Release\Caliburn.Micro.Platform.dll" target="lib\net45\Caliburn.Micro.Platform.dll" />
+        <file src="ApprovalTools\bin\Release\DeltaCompressionDotNet.dll" target="lib\net45\DeltaCompressionDotNet.dll" />
+        <file src="ApprovalTools\bin\Release\DeltaCompressionDotNet.MsDelta.dll" target="lib\net45\DeltaCompressionDotNet.MsDelta.dll" />
+        <file src="ApprovalTools\bin\Release\DeltaCompressionDotNet.PatchApi.dll" target="lib\net45\DeltaCompressionDotNet.PatchApi.dll" />
+        <file src="ApprovalTools\bin\Release\FirstFloor.ModernUI.dll" target="lib\net45\FirstFloor.ModernUI.dll" />
+        <file src="ApprovalTools\bin\Release\ICSharpCode.SharpZipLib.dll" target="lib\net45\ICSharpCode.SharpZipLib.dll" />
+        <file src="ApprovalTools\bin\Release\JetBrains.Annotations.dll" target="lib\net45\JetBrains.Annotations.dll" />
+        <file src="ApprovalTools\bin\Release\Mono.Cecil.dll" target="lib\net45\Mono.Cecil.dll" />
+        <file src="ApprovalTools\bin\Release\Mono.Cecil.Mdb.dll" target="lib\net45\Mono.Cecil.Mdb.dll" />
+        <file src="ApprovalTools\bin\Release\Mono.Cecil.Pdb.dll" target="lib\net45\Mono.Cecil.Pdb.dll" />
+        <file src="ApprovalTools\bin\Release\Mono.Cecil.Rocks.dll" target="lib\net45\Mono.Cecil.Rocks.dll" />
+        <file src="ApprovalTools\bin\Release\MoreLinq.Portable.dll" target="lib\net45\MoreLinq.Portable.dll" />
+        <file src="ApprovalTools\bin\Release\Newtonsoft.Json.dll" target="lib\net45\Newtonsoft.Json.dll" />
+        <file src="ApprovalTools\bin\Release\Ookii.Dialogs.Wpf.dll" target="lib\net45\Ookii.Dialogs.Wpf.dll" />
+        <file src="ApprovalTools\bin\Release\Splat.dll" target="lib\net45\Splat.dll" />
+        <file src="ApprovalTools\bin\Release\Squirrel.dll" target="lib\net45\Squirrel.dll" />
+        <file src="ApprovalTools\bin\Release\System.Windows.Interactivity.dll" target="lib\net45\System.Windows.Interactivity.dll" />
+    </files>
+</package>
