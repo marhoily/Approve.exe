@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using ApprovalTools.Approve.Properties;
 using Caliburn.Micro;
 using JetBrains.Annotations;
 
@@ -31,6 +32,11 @@ namespace ApprovalTools.Approve.ViewModels
             Approved = approved;
         }
 
+        public void Compare()
+        {
+            Process.Start(Settings.Default.Araxis,
+                string.Format("\"{0}\" \"{1}\"", Received, Approved));
+        }
         public void Approve()
         {
             if (IsHanging)

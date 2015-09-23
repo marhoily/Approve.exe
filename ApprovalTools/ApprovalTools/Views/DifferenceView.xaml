@@ -9,30 +9,33 @@
              d:DataContext="{d:DesignInstance viewModels:DifferenceViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="16"/>
+            <ColumnDefinition Width="16"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="26"/>
+            <ColumnDefinition Width="26"/>
         </Grid.ColumnDefinitions>
         <CheckBox IsChecked="{Binding IsChecked}"/>
-        <Ellipse Grid.Column="1" Width="10" Height="10" Fill="DarkOrange"
-                 Stroke="SaddleBrown" StrokeThickness="1"
-                 VerticalAlignment="Center" Margin="1"/>
-        <Ellipse Grid.Column="2" Width="10" Height="10" Fill="DarkOrange"
-                 Stroke="SaddleBrown" StrokeThickness="1"
-                 VerticalAlignment="Center" Margin="1">
-            <Ellipse.Style>
-                <Style TargetType="Ellipse">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsHanging}" Value="True">
-                            <Setter Property="Visibility" Value="Hidden"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Ellipse.Style>
-        </Ellipse>
+        <Canvas Grid.Column="1" VerticalAlignment="Center" Width="16">
+            <Canvas.RenderTransform>
+                <ScaleTransform ScaleX=".15" ScaleY=".15"/>
+            </Canvas.RenderTransform>
+
+            <Path x:Name="BackArrow" Fill="DarkOrange" Canvas.Top="-49" Canvas.Left="15"  Data="F 1 M 85.798,56 L 65,56 65,47.611 C 65,45.114 63.666,44.442 61.814,46.118 L 44.692,61.698 C 42.84,63.374 42.887,66.117 44.738,67.793 L 61.792,83.372 C 63.645,85.049 65,84.377 65,81.879 L 65,73 85.798,73 C 88.296,73 90,71.217 90,68.718 L 90,60.772 C 90,58.275 88.296,56 85.798,56 Z" >
+                <Path.Style>
+                    <Style TargetType="Path">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsHanging}" Value="True">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Path.Style>
+            </Path>
+            <Path Fill="DarkOrange" Canvas.Top="-49" Canvas.Left="15"  Data="F 1 M 54.317,37.857 L 37.234,22.277 C 35.383,20.601 34,21.273 34,23.771 L 34,33 13.241,33 C 10.743,33 9,34.434 9,36.933 L 9,44.88 C 9,47.375 10.743,50 13.241,50 L 34,50 34,58.039 C 34,60.536 35.353,61.208 37.205,59.531 L 54.336,43.952 C 56.188,42.276 56.169,39.533 54.317,37.857 Z"  />
+        </Canvas>
         <TextBlock Grid.Column="4" Text="{Binding DisplayName}"
                    VerticalAlignment ="Center">
             <TextBlock.Style>
@@ -55,7 +58,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button x:Name="Approve" Grid.Column="5" VerticalAlignment ="Center"
+        <Button x:Name="Approve" Grid.Column="6" VerticalAlignment ="Center"
                 HorizontalAlignment="Center" Padding="9" Margin="1">
             <Button.Content>
                 <Canvas>
@@ -67,6 +70,20 @@
                 </Canvas>
             </Button.Content>
         </Button>
+        <Button x:Name="Compare" Grid.Column="5" 
+                VerticalAlignment ="Center"
+                HorizontalAlignment="Center" Padding="9" Margin="1">
+            <Button.Content>
+                <Canvas Grid.Column="1" >
+                    <Canvas.RenderTransform>
+                        <ScaleTransform ScaleX=".15" ScaleY=".15"/>
+                    </Canvas.RenderTransform>
 
+                    <Path Fill="DarkOrange" Canvas.Top="-37" Canvas.Left="-55" Data="F 1 M 82.521,9.008 L 63.677,9.008 C 61.396,3.711 56.133,0 50,0 43.867,0 38.604,3.711 36.325,9.008 L 17.479,9.008 C 14.277,9.008 11.678,11.605 11.678,14.81 11.678,18.014 14.276,20.611 17.479,20.611 L 36.259,20.611 C 38.502,25.99 43.807,29.772 49.999,29.772 56.191,29.772 61.497,25.99 63.74,20.611 L 82.52,20.611 C 85.725,20.611 88.322,18.014 88.322,14.81 88.322,11.605 85.726,9.008 82.521,9.008 Z M 53.818,14.504 C 53.818,16.612 52.108,18.32 50,18.32 47.893,18.32 46.184,16.611 46.184,14.504 46.184,12.396 47.892,10.687 50,10.687 52.108,10.688 53.818,12.396 53.818,14.504 Z" d:IsLocked="True"/>
+                    <Path Fill="DarkOrange" Canvas.Top="-37" Canvas.Left="-55" Data="F 1 M 25.039,23.665 L 18.779,23.665 0,57.558 C 0,69.826 9.946,79.772 22.214,79.772 34.482,79.772 44.428,69.826 44.428,57.558 L 25.039,23.665 Z M 22.214,26.565 L 37.634,53.856 6.336,53.856 22.214,26.565 Z" d:IsLocked="True"/>
+                    <Path Fill="DarkOrange" Canvas.Top="-37" Canvas.Left="-55" Data="F 1 M 80.613,23.665 L 74.352,23.665 55.573,57.558 C 55.573,69.826 65.519,79.772 77.787,79.772 90.056,79.772 100.001,69.826 100.001,57.558 L 80.613,23.665 Z M 77.787,26.565 L 93.208,53.856 61.91,53.856 77.787,26.565 Z" d:IsLocked="True"/>
+                </Canvas>
+            </Button.Content>
+        </Button>
     </Grid>
 </UserControl>

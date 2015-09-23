@@ -99,8 +99,7 @@ namespace ApprovalTools.Approve.ViewModels
         public void AraxisCompareAllFiles()
         {
             foreach (var diff in Folders.SelectMany(f => f.ApprovalPending))
-                Process.Start(Settings.Default.Araxis,
-                    string.Format("\"{0}\" \"{1}\"", diff.Received, diff.Approved));
+                diff.Compare();
         }
 
         [UsedImplicitly]
