@@ -27,11 +27,9 @@ namespace ApprovalTools.Approve.ViewModels
             CanAraxisCompareFolders = true;
             CanAraxisCompareAllFiles = true;
 
-            DisplayName = "Approve";
             Folders = new ObservableCollection<FolderViewModel>(
                 JsonConvert.DeserializeObject<FolderViewModel[]>(
-                    Settings.Default.Folders));
-
+                    Settings.Default.Folders).DistinctBy(x => x.Path));
             StartTimer();
         }
 
@@ -104,10 +102,8 @@ namespace ApprovalTools.Approve.ViewModels
         public void AraxisCompareAllFiles()
         {
             foreach (var diff in Folders.SelectMany(f => f.ApprovalPending))
-            {
                 Process.Start(Settings.Default.Araxis,
                     string.Format("\"{0}\" \"{1}\"", diff.Received, diff.Approved));
-            }
         }
 
         [PublicAPI]
