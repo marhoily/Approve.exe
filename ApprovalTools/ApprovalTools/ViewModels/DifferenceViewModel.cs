@@ -1,17 +1,19 @@
 using System.Diagnostics;
 using System.IO;
+using Caliburn.Micro;
 using JetBrains.Annotations;
 
 namespace ApprovalTools.Approve.ViewModels
 {
     [DebuggerDisplay("{DisplayName}")]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public sealed class DifferenceViewModel
+    public sealed class DifferenceViewModel : PropertyChangedBase
     {
         public string Received { get; private set; }
         public string Approved { get; private set; }
         public bool IsHanging { get { return !File.Exists(Approved); } }
         public bool IsChecked { get; set; }
+        public bool Exists { get { return File.Exists(Received); } }
 
         public string DisplayName
         {
@@ -40,6 +42,7 @@ namespace ApprovalTools.Approve.ViewModels
                 File.Delete(Approved);
                 File.Move(Received, Approved);
             }
+            NotifyOfPropertyChange(() => Exists);
         }
 
         public override string ToString() { return DisplayName; }

@@ -34,8 +34,28 @@
             </Ellipse.Style>
         </Ellipse>
         <TextBlock Grid.Column="4" Text="{Binding DisplayName}"
-                   VerticalAlignment ="Center"/>
-        <Button Grid.Column="5" VerticalAlignment ="Center"
+                   VerticalAlignment ="Center">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Exists}" Value="False">
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <TextDecorationCollection>
+                                        <TextDecoration Location="Strikethrough">
+                                            <TextDecoration.Pen>
+                                                <Pen Brush="White" Thickness="2" />
+                                            </TextDecoration.Pen>
+                                        </TextDecoration>
+                                    </TextDecorationCollection>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <Button x:Name="Approve" Grid.Column="5" VerticalAlignment ="Center"
                 HorizontalAlignment="Center" Padding="9" Margin="1">
             <Button.Content>
                 <Canvas>
