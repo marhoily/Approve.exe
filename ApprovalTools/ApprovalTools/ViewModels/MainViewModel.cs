@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Threading;
-using ApprovalTools.Approve.Properties;
 using Caliburn.Micro;
 using JetBrains.Annotations;
 using MoreLinq;

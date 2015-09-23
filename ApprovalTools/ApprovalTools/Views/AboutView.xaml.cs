@@ -7,7 +7,7 @@ namespace ApprovalTools.Approve.Views
         public AboutView()
         {
             InitializeComponent();
-            DataContext = new AboutViewModel();
+            DataContext = AboutViewModel.Instance;
         }
     }
 }
