@@ -17,11 +17,15 @@ namespace ApprovalTools.Approve.ViewModels
             Path = path;
         }
 
-        public IEnumerable<string> GetApprovalsPending()
+        public IEnumerable<DifferenceViewModel> GetApprovalsPending()
         {
             return IsEnabled && Exists
                 ? _fm.GetPendingApprovals(Path)
-                : Enumerable.Empty<string>();
+                : Enumerable.Empty<DifferenceViewModel>();
+        }
+        public IEnumerable<DifferenceViewModel> GetHangingItemsAndApprovalsPending()
+        {
+            return GetApprovalsPending().Concat(GetAllHanging());
         }
 
         public IEnumerable<Tuple<string, string>> GetAllDifferences()
@@ -30,20 +34,20 @@ namespace ApprovalTools.Approve.ViewModels
             var receivedFiles = Directory.GetFiles(
                 Path, "*.received.*", SearchOption.AllDirectories);
             return from received in receivedFiles
-                let approved = received.Replace(".received.", ".approved.")
-                where File.Exists(approved)
-                select Tuple.Create(received, approved);
+                   let approved = received.Replace(".received.", ".approved.")
+                   where File.Exists(approved)
+                   select Tuple.Create(received, approved);
         }
 
-        public IEnumerable<Tuple<string, string>> GetAllHanging()
+        public IEnumerable<DifferenceViewModel> GetAllHanging()
         {
-            if (!IsEnabled || !Exists) return Enumerable.Empty<Tuple<string, string>>();
+            if (!IsEnabled || !Exists) return Enumerable.Empty<DifferenceViewModel>();
             var receivedFiles = Directory.GetFiles(
                 Path, "*.received.*", SearchOption.AllDirectories);
             return from received in receivedFiles
-                let approved = received.Replace(".received.", ".approved.")
-                where !File.Exists(approved)
-                select Tuple.Create(received, approved);
+                   let approved = received.Replace(".received.", ".approved.")
+                   where !File.Exists(approved)
+                   select new DifferenceViewModel(received, approved);
         }
     }
 }

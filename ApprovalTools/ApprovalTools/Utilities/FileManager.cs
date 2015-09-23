@@ -37,14 +37,13 @@ namespace ApprovalTools.Approve.ViewModels
             Directory.CreateDirectory(target);
         }
 
-        public IEnumerable<string> GetPendingApprovals(string root)
+        public IEnumerable<DifferenceViewModel> GetPendingApprovals(string root)
         {
-            var received = Directory.GetFiles(root, "*.received.*", SearchOption.AllDirectories);
-            return from file in received
-                select file.Replace(".received.", ".approved.")
-                into approved
+            return
+                from received in Directory.GetFiles(root, "*.received.*", SearchOption.AllDirectories)
+                let approved = received.Replace(".received.", ".approved.")
                 where File.Exists(approved)
-                select Path.GetFileName(approved).Replace(".approved.", ".*.");
+                select new DifferenceViewModel(received, approved);
         }
     }
 }

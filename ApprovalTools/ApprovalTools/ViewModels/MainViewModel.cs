@@ -16,7 +16,7 @@ namespace ApprovalTools.Approve.ViewModels
     {
         private readonly Araxis _araxis = new Araxis();
         private readonly FileManager _fm = new FileManager();
-        private List<string> _approvalsPending;
+        private List<DifferenceViewModel> _approvalsPending;
         private bool _canAraxisCompareAllFiles;
         private bool _canAraxisCompareFolders;
 
@@ -51,14 +51,13 @@ namespace ApprovalTools.Approve.ViewModels
         [PublicAPI]
         public void RefreshList()
         {
-
             ApprovalsPending = Folders
-                .SelectMany(f => f.GetApprovalsPending())
+                .SelectMany(f => f.GetHangingItemsAndApprovalsPending())
                 .ToList();
         }
 
         [PublicAPI]
-        public List<string> ApprovalsPending
+        public List<DifferenceViewModel> ApprovalsPending
         {
             get { return _approvalsPending; }
             set
@@ -134,7 +133,7 @@ namespace ApprovalTools.Approve.ViewModels
         {
             foreach (var diff in Folders.SelectMany(f => f.GetAllHanging()))
             {
-                File.Move(diff.Item1, diff.Item2);
+                diff.Approve();
             }
 
             RefreshList();

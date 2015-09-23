@@ -97,12 +97,16 @@
     <Compile Include="Utilities\CaliburnContentLoader.cs" />
     <Compile Include="Utilities\Araxis.cs" />
     <Compile Include="Utilities\FileManager.cs" />
+    <Compile Include="ViewModels\DifferenceViewModel.cs" />
     <Compile Include="ViewModels\FolderViewModel.cs" />
     <Compile Include="Utilities\Hooks.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SettingsAppearanceViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="Views\DifferenceView.xaml.cs">
+      <DependentUpon>DifferenceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FolderView.xaml.cs">
       <DependentUpon>FolderView.xaml</DependentUpon>
     </Compile>
@@ -164,6 +168,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\DifferenceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\FolderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
