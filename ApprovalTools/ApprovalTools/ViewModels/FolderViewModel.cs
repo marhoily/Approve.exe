@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using JetBrains.Annotations;
 
 namespace ApprovalTools.Approve.ViewModels
@@ -22,6 +21,7 @@ namespace ApprovalTools.Approve.ViewModels
                     IsDirty = true;
                     _buffer = null;
                 });
+            IsDirty = true;
         }
 
         public string Path { get; private set; }
@@ -36,8 +36,7 @@ namespace ApprovalTools.Approve.ViewModels
             get
             {
                 if (!IsEnabled || !Exists) return Enumerable.Empty<DifferenceViewModel>();
-                return _buffer ?? (_buffer 
-                    = _fm.GetDifferenceViewModels(Path).ToList());
+                return _buffer ?? (_buffer = _fm.GetDifferenceViewModels(Path).ToList());
             }
         }
 
@@ -45,7 +44,5 @@ namespace ApprovalTools.Approve.ViewModels
         public IEnumerable<DifferenceViewModel> Hanging { get { return Buffer.Where(x => x.IsHanging); } }
         public IEnumerable<DifferenceViewModel> ApprovalPending { get { return Buffer.Where(x => !x.IsHanging); } }
         public void Dispose() { _watcher.Dispose(); }
-        [OnDeserialized]
-        internal void OnDeserializedMethod(StreamingContext context) { IsDirty = true; }
     }
 }

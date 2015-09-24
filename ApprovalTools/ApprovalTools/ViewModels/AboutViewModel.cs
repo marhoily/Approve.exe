@@ -10,6 +10,7 @@ namespace ApprovalTools.Approve.ViewModels
 
         public static readonly AboutViewModel Instance = new AboutViewModel();
         private string _state;
+        private string _lastError;
 
         public string Version
         {
@@ -29,6 +30,17 @@ namespace ApprovalTools.Approve.ViewModels
                 if (value == _state) return;
                 _state = value;
                 NotifyOfPropertyChange(() => State);
+            }
+        }
+
+        public string LastError
+        {
+            get { return _lastError; }
+            set
+            {
+                if (value == _lastError) return;
+                _lastError = value;
+                NotifyOfPropertyChange(() => LastError);
             }
         }
     }

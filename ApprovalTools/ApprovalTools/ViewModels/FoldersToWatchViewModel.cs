@@ -1,5 +1,8 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using ApprovalTools.Approve.Properties;
+using ApprovalTools.Approve.Utilities;
 using JetBrains.Annotations;
 using MoreLinq;
 using Newtonsoft.Json;
@@ -11,9 +14,11 @@ namespace ApprovalTools.Approve.ViewModels
     {
         public FoldersToWatchViewModel()
         {
-            Folders = new ObservableCollection<FolderViewModel>(
-                JsonConvert.DeserializeObject<FolderViewModel[]>(
-                    Settings.Default.Folders).DistinctBy(x => x.Path));
+            var deserializeResult = FolderSetting
+                .Deserialize(Settings.Default.Folders)
+                .DistinctBy(x => x.Path)
+                .Select(x => new FolderViewModel(x.Path) {IsEnabled = x.IsEnabled});
+            Folders = new ObservableCollection<FolderViewModel>(deserializeResult);
         }
 
         [UsedImplicitly]
@@ -27,10 +32,15 @@ namespace ApprovalTools.Approve.ViewModels
             Folders.Add(
                 new FolderViewModel(dlg.SelectedPath)
                 {
-                    IsEnabled = true,
-                    IsDirty = true
+                    IsEnabled = true
                 });
-            Settings.Default.Folders = JsonConvert.SerializeObject(Folders);
+            Settings.Default.Folders = JsonConvert.SerializeObject(
+                Folders.Select(f =>
+                    new FolderSetting
+                    {
+                        Path = f.Path,
+                        IsEnabled = f.IsEnabled
+                    }));
             Settings.Default.Save();
         }
     }

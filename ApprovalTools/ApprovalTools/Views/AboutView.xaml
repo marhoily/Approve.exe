@@ -15,5 +15,10 @@
         <TextBlock VerticalAlignment="Center"
                    HorizontalAlignment="Center" 
                    Text="{Binding Version}"/>
+
+        <TextBlock VerticalAlignment="Top"
+                   HorizontalAlignment="Left" 
+                   TextWrapping="Wrap"
+                   Text="{Binding LastError}"/>
     </Grid>
 </UserControl>
