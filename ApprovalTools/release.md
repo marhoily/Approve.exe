@@ -14,6 +14,8 @@
 
 7) Commit release folder to the github. Don't forget to include "delta" and "full" packages
 
+8) Remove the nupkg file from the root folder
+
 -----
 * - if you don't have nuget installed run:
 

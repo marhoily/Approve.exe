@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using ApprovalTools.Approve.Properties;
 using ApprovalTools.Approve.Utilities;
@@ -17,6 +18,7 @@ namespace ApprovalTools.Approve.ViewModels
             var deserializeResult = FolderSetting
                 .Deserialize(Settings.Default.Folders)
                 .DistinctBy(x => x.Path)
+                .Where(x => Directory.Exists(x.Path))
                 .Select(x => new FolderViewModel(x.Path) {IsEnabled = x.IsEnabled});
             Folders = new ObservableCollection<FolderViewModel>(deserializeResult);
         }
